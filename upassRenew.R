@@ -3,8 +3,21 @@ library(magrittr)
 library(stringr)
 library(methods)
 
+# auto kill server that might be still up
+killPid = system(' ps ax  | grep selenium',intern = TRUE) %>% str_extract('^(\\s)*[0-9]*(?=\\s)')
+killPid %>% sapply(function(x){
+    system(paste('kill -9',x))
+})
+
+killPid = system(' ps ax  | grep firefox',intern = TRUE) %>% str_extract('^\\s*[0-9]*(?=\\s)')
+killPid %>% sapply(function(x){
+    system(paste('kill -9',x))
+})
+
+
+
 print('starting selenium')
-system('java -jar selenium-server-standalone-3.4.0.jar -port 4445 &') # clicking doesn't work in latest 3.6 version
+system('java -jar selenium-server-standalone-3.8.1.jar -port 4445 &')
 
 sleepyTime = 5
 Sys.sleep(sleepyTime)
